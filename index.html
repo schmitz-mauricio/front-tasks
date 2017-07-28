@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" ng-app="task">
+<head>
+	<title>Task-List</title>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Angular js Task-Sortable-List Example"/>
+	<meta name="author" content="Jay Kanakiya">
+
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/jquery-ui.min.css">
+	<link rel="stylesheet" href="css/common.css">
+
+	<script src="js/libs/jquery.min.js"></script>
+	<script src="js/libs/jquery-ui.min.js"></script>
+	<script src="js/libs/jquery.ui.touch-punch.min.js"></script>
+	<script src="js/libs/bootstrap.min.js"></script>
+	<script src="js/libs/angular.min.js"></script>
+	<script src="js/libs/angular-local-storage.min.js"></script>
+	<script src="js/libs/sortable.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/directives/angular.editInPlace.js"></script>
+	<script src="js/directives/angular.ngEnter.js"></script>
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body ng-controller="TaskCtrl" ng-init="init()">
+	<!-- The Common Navigation Navbar-->
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Task</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+	<div class="container" ng-controller="TaskCtrl" id="playground">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="row">
+					<div class="col-xs-7">
+						<div class="input-group">
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+							</span>
+							<input type="search" class="form-control" placeholder="Search" ng-model="taskSearch">
+						</div>
+					</div>
+					<div class="col-xs-5">
+						<ul class="nav nav-pills task-filter">
+						  <li ng-class="{'active' : show == 'All' }" ng-click="show='All'"><a href="#">All</a></li>
+						  <li ng-class="{'active' : show == 'Incomplete' }" ng-click="show='Incomplete'"><a href="#">Incomplete</a></li>
+						  <li ng-class="{'active' : show == 'Complete' }" ng-click="show='Complete'"><a href="#">Complete</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="row" id="taskAdd">
+					<div class="form-group">
+						<input class="taskField" id="newTaskField" type="text" ng-model="newTask" placeholder="Add New Task" ng-enter>
+						<button id="taskSubmit" class="btn btn-default" ng-click="addTask()">Add</button>
+					</div>
+				</div>
+				<div class="row">
+					<ul class="list-unstyled" ng-repeat="tasks in model track by $index" ui-sortable="taskSortable" ng-model="tasks.list" ng-show="$index === currentShow">
+						<li class="taskTask" ng-repeat="task in tasks.list | filter:showFn | filter :taskSearch ">
+							<label><input class="taskCheckbox" ng-model="task.done" ng-change="editTask(task)" type="checkbox"> Done </label>
+							<button type="button" class="close pull-right" aria-hidden="true" ng-click="deleteTask(task)">&times;</button>
+							<edit-in-place value="task" onupdate="editTask(task);"></edit-in-place>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
